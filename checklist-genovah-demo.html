@@ -1,0 +1,386 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Checklist Genovah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#FAF7F5; --surface:#FFFFFF; --surface-2:#F4EEEB;
+    --ink:#2B2530; --ink-soft:#6B6270; --line:#E9E0DB;
+    --accent:#7A5BA5; --accent-soft:#F0EAF7;
+    --ok:#1F8A5B; --ok-bg:#E4F3EC;
+    --warn:#B0741A; --warn-bg:#F8EED9;
+    --danger:#C0392B; --danger-bg:#F8E3E0;
+    --shadow:0 1px 2px rgba(43,37,48,.06), 0 8px 24px rgba(43,37,48,.06);
+    --radius:14px;
+    --font-display:"Fraunces",Georgia,serif;
+    --font-body:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#1A161C; --surface:#241E27; --surface-2:#2E2732;
+      --ink:#F2ECF0; --ink-soft:#B7AABA; --line:#3A3140;
+      --accent:#B79BDB; --accent-soft:#312840;
+      --ok:#4FCB8B; --ok-bg:#16281F;
+      --warn:#E0A94A; --warn-bg:#2E2410;
+      --danger:#E8756A; --danger-bg:#33191A;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1A161C; --surface:#241E27; --surface-2:#2E2732;
+    --ink:#F2ECF0; --ink-soft:#B7AABA; --line:#3A3140;
+    --accent:#B79BDB; --accent-soft:#312840;
+    --ok:#4FCB8B; --ok-bg:#16281F;
+    --warn:#E0A94A; --warn-bg:#2E2410;
+    --danger:#E8756A; --danger-bg:#33191A;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:var(--font-body); line-height:1.5;
+    margin:0; padding:0 0 190px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px; margin:0 auto; padding:0 16px}
+
+  /* ---------- Header ---------- */
+  header{padding:30px 0 8px}
+  .eyebrow{
+    font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--accent); margin:0 0 8px;
+  }
+  h1{
+    font-family:var(--font-display); font-weight:500;
+    font-size:clamp(28px,7vw,38px); line-height:1.08; letter-spacing:-.01em;
+    margin:0 0 10px; text-wrap:balance;
+  }
+  .lede{color:var(--ink-soft); font-size:15.5px; margin:0 0 20px; max-width:52ch}
+
+  /* ---------- Legend ---------- */
+  .legend{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:0 0 8px;
+  }
+  .legend div{
+    border:1px solid var(--line); border-radius:10px; padding:10px 12px;
+    background:var(--surface);
+  }
+  .legend .k{font-weight:700; font-size:13px; display:flex; align-items:center; gap:7px}
+  .legend .r{font-size:12px; color:var(--ink-soft); margin-top:2px}
+  .dot{width:9px; height:9px; border-radius:50%; flex:none}
+  .dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.danger{background:var(--danger)}
+
+  .note{
+    font-size:12.5px; color:var(--ink-soft); background:var(--surface-2);
+    border-radius:10px; padding:11px 13px; margin:14px 0 4px;
+  }
+  .note b{color:var(--ink)}
+
+  /* ---------- Groups ---------- */
+  section.grp{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); margin:18px 0; overflow:hidden;
+  }
+  .grp-head{
+    display:flex; align-items:center; gap:12px; width:100%;
+    padding:14px 16px; background:var(--accent); border:0; cursor:pointer;
+    color:#fff; text-align:left; font-family:inherit;
+  }
+  .grp-num{
+    font-family:var(--font-display); font-size:15px; font-weight:600;
+    color:#fff; background:rgba(255,255,255,.22);
+    width:30px; height:30px; border-radius:8px; flex:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .grp-title{flex:1; min-width:0}
+  .grp-title .t{font-weight:700; font-size:14.5px; line-height:1.25; color:#fff}
+  .grp-title .m{font-size:12px; color:rgba(255,255,255,.8); margin-top:3px}
+  .grp-sub{
+    font-variant-numeric:tabular-nums; font-weight:700; font-size:13px;
+    color:rgba(255,255,255,.85); flex:none;
+  }
+  .grp-sub.hot{color:#fff; background:rgba(255,255,255,.22); border-radius:20px; padding:2px 9px}
+  .chev{flex:none; color:#fff; opacity:.9; transition:transform .22s ease}
+  .grp[open] .chev{transform:rotate(180deg)}
+
+  .items{border-top:1px solid var(--line)}
+  .item{
+    display:flex; align-items:flex-start; gap:13px;
+    padding:13px 16px; border-bottom:1px solid var(--line);
+    cursor:pointer; position:relative;
+    transition:background .15s ease;
+  }
+  .item:last-child{border-bottom:0}
+  .item:hover{background:var(--surface-2)}
+  .item input{position:absolute; opacity:0; width:1px; height:1px}
+  .box{
+    width:22px; height:22px; border-radius:6px; flex:none; margin-top:1px;
+    border:2px solid var(--line); background:var(--surface);
+    display:flex; align-items:center; justify-content:center;
+    transition:border-color .15s, background .15s;
+  }
+  .box svg{opacity:0; transform:scale(.6); transition:.15s}
+  .item .txt{flex:1; font-size:14.5px; line-height:1.35}
+  .pts{
+    flex:none; font-variant-numeric:tabular-nums; font-weight:700; font-size:12px;
+    color:var(--ink-soft); background:var(--surface-2);
+    border-radius:20px; padding:3px 9px; margin-top:1px; white-space:nowrap;
+  }
+  /* checked state */
+  .item input:checked ~ .box{background:var(--accent); border-color:var(--accent)}
+  .item input:checked ~ .box svg{opacity:1; transform:scale(1)}
+  .item.on{background:var(--accent-soft)}
+  .item.on::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--accent)}
+  .item.on .pts{background:var(--accent); color:#fff}
+  :root[data-theme="dark"] .item.on .pts,
+  @media (prefers-color-scheme:dark){}
+  .item input:focus-visible ~ .box{outline:2px solid var(--accent); outline-offset:2px}
+
+  /* ---------- Sticky result ---------- */
+  .bar{
+    position:fixed; left:0; right:0; bottom:0; z-index:20;
+    background:var(--surface); border-top:1px solid var(--line);
+    box-shadow:0 -6px 24px rgba(43,37,48,.10);
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+    transition:background .3s ease;
+  }
+  .bar-in{max-width:680px; margin:0 auto; display:flex; align-items:center; gap:14px}
+  .score{flex:none; display:flex; align-items:baseline; gap:6px}
+  .score .n{font-family:var(--font-display); font-weight:600; font-size:40px; line-height:1; font-variant-numeric:tabular-nums}
+  .score .u{font-size:12px; color:var(--ink-soft); font-weight:600}
+  .bar-mid{flex:1; min-width:0}
+  .pill{
+    display:inline-flex; align-items:center; gap:7px; font-weight:700; font-size:14px;
+    padding:6px 13px; border-radius:30px;
+  }
+  .pill.ok{background:var(--ok-bg); color:var(--ok)}
+  .pill.warn{background:var(--warn-bg); color:var(--warn)}
+  .pill.danger{background:var(--danger-bg); color:var(--danger)}
+  .track{height:7px; border-radius:6px; margin-top:9px; position:relative; overflow:hidden;
+    background:linear-gradient(90deg,var(--ok) 0 33.33%,var(--warn) 33.33% 66.66%,var(--danger) 66.66% 100%);
+    opacity:.28}
+  .track-wrap{position:relative; margin-top:9px}
+  .track2{height:7px; border-radius:6px; overflow:hidden;
+    background:linear-gradient(90deg,var(--ok) 0 33.33%,var(--warn) 33.33% 66.66%,var(--danger) 66.66% 100%); opacity:.9}
+  .marker{position:absolute; top:-3px; width:3px; height:13px; border-radius:3px; background:var(--ink);
+    box-shadow:0 0 0 2px var(--surface); transition:left .3s cubic-bezier(.4,0,.2,1)}
+  .scale{display:flex; justify-content:space-between; font-size:10px; color:var(--ink-soft);
+    font-variant-numeric:tabular-nums; margin-top:4px}
+  .reset{
+    flex:none; background:none; border:1px solid var(--line); color:var(--ink-soft);
+    border-radius:10px; padding:8px 12px; font-family:inherit; font-weight:600; font-size:13px;
+    cursor:pointer; transition:.15s;
+  }
+  .reset:hover{border-color:var(--accent); color:var(--accent)}
+  .count{font-size:12px; color:var(--ink-soft); margin-top:2px}
+
+  footer{text-align:center; color:var(--ink-soft); font-size:12px; padding:8px 0 4px}
+  @media (max-width:520px){
+    .legend{grid-template-columns:1fr}
+    .bar-in{flex-wrap:wrap; gap:10px 14px}
+    .reset{order:3}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Genovah · Pré-natal</p>
+    <h1>Estratificação de risco gestacional</h1>
+    <p class="lede">Checklist Genovah aplicado na primeira consulta. Marque as condições presentes na gestante — a pontuação e a classificação de risco são calculadas automaticamente.</p>
+
+    <div class="legend">
+      <div><div class="k"><span class="dot ok"></span>Baixo risco</div><div class="r">0 a 4 pontos</div></div>
+      <div><div class="k"><span class="dot warn"></span>Médio risco</div><div class="r">5 a 9 pontos</div></div>
+      <div><div class="k"><span class="dot danger"></span>Alto risco</div><div class="r">10 pontos ou mais</div></div>
+    </div>
+    <p class="note"><b>Como usar:</b> toque em qualquer item para marcar ou desmarcar. O painel inferior mostra a soma dos pontos e o risco em tempo real. Toque no título de um grupo para recolher.</p>
+  </header>
+
+  <main id="app"></main>
+
+  <footer>Protótipo de usabilidade — Checklist Genovah</footer>
+</div>
+
+<div class="bar" id="bar">
+  <div class="bar-in">
+    <div class="score"><span class="n" id="total">0</span><span class="u">pts</span></div>
+    <div class="bar-mid">
+      <span class="pill ok" id="pill">Baixo risco</span>
+      <div class="count" id="count">Nenhum item marcado</div>
+      <div class="track-wrap">
+        <div class="track2"></div>
+        <div class="marker" id="marker" style="left:0%"></div>
+      </div>
+      <div class="scale"><span>0</span><span>5</span><span>10</span><span>15+</span></div>
+    </div>
+    <button class="reset" id="reset" type="button">Limpar</button>
+  </div>
+</div>
+
+<script>
+// Dados reais do checklist Genovah (T_SF_CHECKLIST) — ordenados como no formulário
+const GRUPOS = [
+  { nome:"Condições individuais, socioeconômicas e familiares", itens:[
+    {id:2332, t:"Idade menor que 14 anos", p:2},
+    {id:2333, t:"Idade maior que 40 anos", p:2},
+    {id:2334, t:"Mulher de raça negra (preta ou parda)", p:2},
+    {id:2335, t:"Baixa escolaridade (<5 anos de estudo)", p:2},
+    {id:2336, t:"Tabagista ativa", p:2},
+    {id:2337, t:"Indícios de sofrer violência", p:2},
+    {id:2338, t:"Gestante imigrante, em situação de rua ou em comunidades indígenas/quilombolas", p:2},
+    {id:2339, t:"Baixo peso no início da gestação (IMC < 18)", p:2},
+    {id:2340, t:"Sobrepeso (IMC 25–29,9)", p:1},
+    {id:2341, t:"Obesidade (IMC > 30)", p:4},
+    {id:2342, t:"Obesidade grau 3", p:10},
+    {id:2343, t:"Imigrante", p:2},
+  ]},
+  { nome:"História reprodutiva anterior", itens:[
+    {id:2344, t:"Abortamento espontâneo de repetição (2 ou mais perdas precoces consecutivas)", p:10},
+    {id:2345, t:"Acretismo placentário", p:2},
+    {id:2346, t:"Restrição de crescimento fetal na gestação anterior", p:2},
+    {id:2347, t:"Prematuridade", p:10},
+    {id:2348, t:"História prévia de doença hipertensiva da gestação com desfecho obstétrico ou perinatal ruim", p:10},
+    {id:2349, t:"Óbito fetal de causa não identificada", p:10},
+    {id:2350, t:"Incompetência istmo cervical", p:10},
+    {id:2351, t:"Quadro psiquiátrico grave", p:10},
+    {id:2352, t:"Histórico de cardiomiopatia periparto", p:10},
+  ]},
+  { nome:"Condições clínicas prévias à gestação", itens:[
+    {id:2353, t:"Hipertensão arterial descompensada (encaminhar também à Cardiologia)", p:10},
+    {id:2354, t:"DM1 ou DM2 descompensado (encaminhar também à Endocrinologia)", p:10},
+    {id:2355, t:"Tireoidopatias (hipotireoidismo e hipertireoidismo)", p:10},
+    {id:2356, t:"Doenças psiquiátricas graves (psicose, depressão grave)", p:10},
+    {id:2357, t:"Doenças hematológicas", p:10},
+    {id:2358, t:"Pneumopatias graves (DPOC, asma, doenças intersticiais pulmonares, hipertensão pulmonar)", p:10},
+    {id:2359, t:"Doenças autoimunes (colagenoses, Graves, LES, SAF)", p:10},
+    {id:2360, t:"Uso de medicamentos teratogênicos", p:10},
+    {id:2361, t:"Doença renal crônica (TFG < 60 ou terapia de substituição renal)", p:10},
+    {id:2362, t:"Hemopatias e anemia grave (Hb < 8) ou refratária ao tratamento por 30–60 dias", p:10},
+    {id:2363, t:"Hepatopatias crônicas (hepatites virais, cirrose)", p:10},
+    {id:2364, t:"Transplantes", p:10},
+    {id:2365, t:"Cirurgia bariátrica recente (< 6 meses)", p:10},
+    {id:2366, t:"Epilepsia", p:10},
+    {id:2367, t:"Anormalidades do trato genitourinário", p:10},
+    {id:2368, t:"Histórico de conização ou traquelectomia", p:10},
+    {id:2369, t:"Infecção por HIV com má adesão ao tratamento e/ou carga viral detectável e/ou CD4 baixo", p:10},
+    {id:2370, t:"Cesariana anterior com incisão uterina longitudinal", p:10},
+  ]},
+  { nome:"Intercorrências clínicas/obstétricas na gestação atual", itens:[
+    {id:2371, t:"Doença hipertensiva da gestação / pré-eclâmpsia", p:10},
+    {id:2372, t:"Diabetes gestacional", p:10},
+    {id:2373, t:"Infecção urinária de repetição (3 ou mais) ou pielonefrite", p:10},
+    {id:2374, t:"Cálculo renal com obstrução", p:10},
+    {id:2375, t:"Restrição de crescimento fetal", p:10},
+    {id:2376, t:"Feto acima do percentil 90% ou suspeita de macrossomia", p:10},
+    {id:2377, t:"Polidrâmnio / oligodrâmnio", p:10},
+    {id:2378, t:"Má formação fetal ou sindrômico", p:10},
+    {id:2379, t:"Suspeita de incompetência istmo cervical (colo curto em USG a partir de 18 semanas)", p:10},
+    {id:2380, t:"Placenta prévia com diagnóstico a partir de 14 semanas", p:10},
+    {id:2381, t:"Hepatopatias (cirrose, hepatites agudas e crônicas, colestase, esteatose gravídica)", p:10},
+    {id:2382, t:"Anemia grave (Hb < 8) ou refratária ao tratamento (30–60 dias com sulfato ferroso por via oral)", p:10},
+    {id:2383, t:"Isoimunização Rh (Rh negativo e Coombs indireto positivo)", p:10},
+    {id:2384, t:"Câncer materno com diagnóstico durante a gestação", p:10},
+    {id:2385, t:"Suspeita clínica de câncer de mama ou mamografia com BI-RADS 3 ou mais", p:10},
+    {id:2386, t:"Lesão de alto grau em colo uterino — NIC 2 ou 3", p:10},
+    {id:2387, t:"Suspeita de malformação fetal ou arritmia fetal", p:10},
+    {id:2388, t:"Gemelaridade", p:10},
+    {id:2389, t:"Doenças infecciosas agudas com potencial de transmissão fetal", p:10},
+    {id:2390, t:"Condiloma acuminado", p:10},
+    {id:2391, t:"Dependência e/ou uso abusivo de drogas lícitas ou ilícitas", p:10},
+    {id:2392, t:"Hiperêmese gravídica refratária ao tratamento (perda de > 5% do peso corporal)", p:10},
+    {id:2393, t:"Acretismo placentário", p:10},
+    {id:2394, t:"Doença autoimune", p:10},
+    {id:2395, t:"Tromboembolismo", p:10},
+    {id:2396, t:"Doenças hematológicas", p:10},
+    {id:2397, t:"Deformidade esquelética materna grave", p:10},
+    {id:2398, t:"Doença neurológica", p:10},
+  ]},
+];
+
+const CHECK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+const app = document.getElementById('app');
+
+GRUPOS.forEach((g, gi) => {
+  const total = g.itens.reduce((s,i)=>s+i.p,0);
+  const sec = document.createElement('details');
+  sec.className = 'grp';
+  sec.open = true;
+  sec.innerHTML = `
+    <summary class="grp-head">
+      <span class="grp-num">${gi+1}</span>
+      <span class="grp-title">
+        <span class="t">${g.nome}</span>
+        <span class="m">${g.itens.length} itens · até ${total} pts</span>
+      </span>
+      <span class="grp-sub" data-sub="${gi}">0 pts</span>
+      <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </summary>
+    <div class="items">
+      ${g.itens.map(i=>`
+        <label class="item" data-g="${gi}">
+          <input type="checkbox" data-p="${i.p}" data-g="${gi}">
+          <span class="box">${CHECK}</span>
+          <span class="txt">${i.t}</span>
+          <span class="pts">${i.p} pt${i.p>1?'s':''}</span>
+        </label>`).join('')}
+    </div>`;
+  app.appendChild(sec);
+});
+
+// impede que o clique no cabeçalho conte como toque no primeiro item
+document.querySelectorAll('.grp-head').forEach(h=>{
+  h.addEventListener('click', e=>{ /* summary já alterna */ });
+});
+
+const inputs = [...document.querySelectorAll('.item input')];
+const elTotal = document.getElementById('total');
+const elPill = document.getElementById('pill');
+const elCount = document.getElementById('count');
+const elMarker = document.getElementById('marker');
+const elBar = document.getElementById('bar');
+const subs = [...document.querySelectorAll('[data-sub]')];
+
+function classify(t){
+  if (t >= 10) return {cls:'danger', label:'Alto risco', bg:'var(--danger-bg)'};
+  if (t >= 5)  return {cls:'warn',   label:'Médio risco', bg:'var(--warn-bg)'};
+  return {cls:'ok', label:'Baixo risco', bg:'var(--surface)'};
+}
+
+function update(){
+  let total = 0, n = 0;
+  const bySub = GRUPOS.map(()=>0);
+  inputs.forEach(inp=>{
+    const parent = inp.closest('.item');
+    if (inp.checked){
+      const p = +inp.dataset.p, g = +inp.dataset.g;
+      total += p; n++; bySub[g] += p;
+      parent.classList.add('on');
+    } else parent.classList.remove('on');
+  });
+  elTotal.textContent = total;
+  subs.forEach((s,i)=>{
+    s.textContent = bySub[i] + ' pts';
+    s.classList.toggle('hot', bySub[i] > 0);
+  });
+  const c = classify(total);
+  elPill.className = 'pill ' + c.cls;
+  elPill.textContent = c.label;
+  elBar.style.background = c.bg;
+  elCount.textContent = n === 0 ? 'Nenhum item marcado'
+    : n + (n===1?' item marcado':' itens marcados');
+  // marcador: 0..15 mapeado em 0..100%, saturando em 15+
+  const pct = Math.min(total, 15) / 15 * 100;
+  elMarker.style.left = pct + '%';
+}
+
+inputs.forEach(i=>i.addEventListener('change', update));
+document.getElementById('reset').addEventListener('click', ()=>{
+  inputs.forEach(i=>i.checked=false);
+  update();
+});
+update();
+</script>

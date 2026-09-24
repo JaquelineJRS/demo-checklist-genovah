@@ -42,7 +42,7 @@
   body{
     background:var(--bg); color:var(--ink);
     font-family:var(--font-body); line-height:1.5;
-    margin:0; padding:0 0 190px;
+    margin:0; padding:0 0 48px;
     -webkit-font-smoothing:antialiased;
   }
   .wrap{max-width:680px; margin:0 auto; padding:0 16px}
@@ -139,49 +139,54 @@
   @media (prefers-color-scheme:dark){}
   .item input:focus-visible ~ .box{outline:2px solid var(--accent); outline-offset:2px}
 
-  /* ---------- Sticky result ---------- */
-  .bar{
-    position:fixed; left:0; right:0; bottom:0; z-index:20;
-    background:var(--surface); border-top:1px solid var(--line);
-    box-shadow:0 -6px 24px rgba(43,37,48,.10);
-    padding:12px 16px calc(12px + env(safe-area-inset-bottom));
-    transition:background .3s ease;
+  /* ---------- Ações e resultado ---------- */
+  .actions{display:flex; gap:12px; margin:22px 0 8px}
+  .btn{
+    font-family:inherit; font-weight:700; font-size:15px; border-radius:12px;
+    padding:15px 18px; cursor:pointer; border:1px solid transparent; transition:.15s;
   }
-  .bar-in{max-width:680px; margin:0 auto; display:flex; align-items:center; gap:14px}
-  .score{flex:none; display:flex; align-items:baseline; gap:6px}
-  .score .n{font-family:var(--font-display); font-weight:600; font-size:40px; line-height:1; font-variant-numeric:tabular-nums}
-  .score .u{font-size:12px; color:var(--ink-soft); font-weight:600}
-  .bar-mid{flex:1; min-width:0}
-  .pill{
-    display:inline-flex; align-items:center; gap:7px; font-weight:700; font-size:14px;
-    padding:6px 13px; border-radius:30px;
+  .btn-primary{flex:1; background:var(--accent); color:#fff}
+  .btn-primary:hover{filter:brightness(1.06)}
+  .btn-ghost{flex:none; background:none; border-color:var(--line); color:var(--ink-soft)}
+  .btn-ghost:hover{border-color:var(--accent); color:var(--accent)}
+  .btn:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+  .result{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:22px 20px; margin:8px 0 24px; scroll-margin-top:16px;
   }
+  .result-top{display:flex; align-items:center; gap:16px; flex-wrap:wrap}
+  .score{display:flex; align-items:baseline; gap:7px}
+  .score .n{font-family:var(--font-display); font-weight:600; font-size:52px; line-height:.9;
+    font-variant-numeric:tabular-nums; color:var(--accent)}
+  .score .u{font-size:13px; color:var(--ink-soft); font-weight:600}
+  .pill{display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:15px;
+    padding:8px 15px; border-radius:30px}
+  .pill::before{content:""; width:9px; height:9px; border-radius:50%; background:currentColor}
   .pill.ok{background:var(--ok-bg); color:var(--ok)}
   .pill.warn{background:var(--warn-bg); color:var(--warn)}
   .pill.danger{background:var(--danger-bg); color:var(--danger)}
-  .track{height:7px; border-radius:6px; margin-top:9px; position:relative; overflow:hidden;
-    background:linear-gradient(90deg,var(--ok) 0 33.33%,var(--warn) 33.33% 66.66%,var(--danger) 66.66% 100%);
-    opacity:.28}
-  .track-wrap{position:relative; margin-top:9px}
-  .track2{height:7px; border-radius:6px; overflow:hidden;
+  .count{font-size:13px; color:var(--ink-soft); margin:14px 0 0}
+  .track-wrap{position:relative; margin:18px 0 4px}
+  .track2{height:8px; border-radius:6px; overflow:hidden;
     background:linear-gradient(90deg,var(--ok) 0 33.33%,var(--warn) 33.33% 66.66%,var(--danger) 66.66% 100%); opacity:.9}
-  .marker{position:absolute; top:-3px; width:3px; height:13px; border-radius:3px; background:var(--ink);
-    box-shadow:0 0 0 2px var(--surface); transition:left .3s cubic-bezier(.4,0,.2,1)}
+  .marker{position:absolute; top:-3px; width:3px; height:14px; border-radius:3px; background:var(--ink);
+    box-shadow:0 0 0 2px var(--surface); transition:left .35s cubic-bezier(.4,0,.2,1)}
   .scale{display:flex; justify-content:space-between; font-size:10px; color:var(--ink-soft);
-    font-variant-numeric:tabular-nums; margin-top:4px}
-  .reset{
-    flex:none; background:none; border:1px solid var(--line); color:var(--ink-soft);
-    border-radius:10px; padding:8px 12px; font-family:inherit; font-weight:600; font-size:13px;
-    cursor:pointer; transition:.15s;
-  }
-  .reset:hover{border-color:var(--accent); color:var(--accent)}
-  .count{font-size:12px; color:var(--ink-soft); margin-top:2px}
+    font-variant-numeric:tabular-nums; margin-top:5px}
+  .faixas{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:18px}
+  .faixas>div{border:1px solid var(--line); border-radius:10px; padding:9px 11px}
+  .faixas .k{font-weight:700; font-size:12.5px; display:flex; align-items:center; gap:7px}
+  .faixas .r{font-size:11.5px; color:var(--ink-soft); margin-top:2px}
+  .faixas>div.act{border-color:currentColor}
+  .faixas>div.ok.act{color:var(--ok)}
+  .faixas>div.warn.act{color:var(--warn)}
+  .faixas>div.danger.act{color:var(--danger)}
 
   footer{text-align:center; color:var(--ink-soft); font-size:12px; padding:8px 0 4px}
   @media (max-width:520px){
-    .legend{grid-template-columns:1fr}
-    .bar-in{flex-wrap:wrap; gap:10px 14px}
-    .reset{order:3}
+    .faixas{grid-template-columns:1fr}
+    .score .n{font-size:46px}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -189,36 +194,38 @@
 <div class="wrap">
   <header>
     <p class="eyebrow">Genovah · Pré-natal</p>
-    <h1>Estratificação de risco gestacional</h1>
-    <p class="lede">Checklist Genovah aplicado na primeira consulta. Marque as condições presentes na gestante — a pontuação e a classificação de risco são calculadas automaticamente.</p>
+    <h1>Checklist de risco gestacional</h1>
+    <p class="lede">Aplicado na primeira consulta. Marque as condições presentes na gestante e, ao final, toque em <b>Calcular risco</b> para ver a pontuação e a classificação.</p>
 
-    <div class="legend">
-      <div><div class="k"><span class="dot ok"></span>Baixo risco</div><div class="r">0 a 4 pontos</div></div>
-      <div><div class="k"><span class="dot warn"></span>Médio risco</div><div class="r">5 a 9 pontos</div></div>
-      <div><div class="k"><span class="dot danger"></span>Alto risco</div><div class="r">10 pontos ou mais</div></div>
-    </div>
-    <p class="note"><b>Como usar:</b> toque em qualquer item para marcar ou desmarcar. O painel inferior mostra a soma dos pontos e o risco em tempo real. Toque no título de um grupo para recolher.</p>
+    <p class="note"><b>Como usar:</b> toque em qualquer item para marcar ou desmarcar. Toque no título de um grupo para recolher. Quando terminar, use o botão <b>Calcular risco</b> no fim da página.</p>
   </header>
 
   <main id="app"></main>
 
-  <footer>Protótipo de usabilidade — Checklist Genovah</footer>
-</div>
-
-<div class="bar" id="bar">
-  <div class="bar-in">
-    <div class="score"><span class="n" id="total">0</span><span class="u">pts</span></div>
-    <div class="bar-mid">
-      <span class="pill ok" id="pill">Baixo risco</span>
-      <div class="count" id="count">Nenhum item marcado</div>
-      <div class="track-wrap">
-        <div class="track2"></div>
-        <div class="marker" id="marker" style="left:0%"></div>
-      </div>
-      <div class="scale"><span>0</span><span>5</span><span>10</span><span>15+</span></div>
-    </div>
-    <button class="reset" id="reset" type="button">Limpar</button>
+  <div class="actions">
+    <button class="btn btn-primary" id="calc" type="button">Calcular risco</button>
+    <button class="btn btn-ghost" id="reset" type="button">Limpar</button>
   </div>
+
+  <section class="result" id="result" hidden aria-live="polite">
+    <div class="result-top">
+      <div class="score"><span class="n" id="total">0</span><span class="u">pontos</span></div>
+      <span class="pill ok" id="pill">Baixo risco</span>
+    </div>
+    <p class="count" id="count">Nenhum item marcado</p>
+    <div class="track-wrap">
+      <div class="track2"></div>
+      <div class="marker" id="marker" style="left:0%"></div>
+    </div>
+    <div class="scale"><span>0</span><span>5</span><span>10</span><span>15+</span></div>
+    <div class="faixas">
+      <div class="ok" id="fx-ok"><div class="k"><span class="dot ok"></span>Baixo risco</div><div class="r">0 a 4 pontos</div></div>
+      <div class="warn" id="fx-warn"><div class="k"><span class="dot warn"></span>Médio risco</div><div class="r">5 a 9 pontos</div></div>
+      <div class="danger" id="fx-danger"><div class="k"><span class="dot danger"></span>Alto risco</div><div class="r">10 pontos ou mais</div></div>
+    </div>
+  </section>
+
+  <footer>Protótipo de usabilidade — Checklist Genovah</footer>
 </div>
 
 <script>
@@ -314,9 +321,8 @@ GRUPOS.forEach((g, gi) => {
       <span class="grp-num">${gi+1}</span>
       <span class="grp-title">
         <span class="t">${g.nome}</span>
-        <span class="m">${g.itens.length} itens · até ${total} pts</span>
+        <span class="m">${g.itens.length} itens</span>
       </span>
-      <span class="grp-sub" data-sub="${gi}">0 pts</span>
       <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
     </summary>
     <div class="items">
@@ -325,62 +331,67 @@ GRUPOS.forEach((g, gi) => {
           <input type="checkbox" data-p="${i.p}" data-g="${gi}">
           <span class="box">${CHECK}</span>
           <span class="txt">${i.t}</span>
-          <span class="pts">${i.p} pt${i.p>1?'s':''}</span>
         </label>`).join('')}
     </div>`;
   app.appendChild(sec);
 });
 
-// impede que o clique no cabeçalho conte como toque no primeiro item
-document.querySelectorAll('.grp-head').forEach(h=>{
-  h.addEventListener('click', e=>{ /* summary já alterna */ });
-});
-
-const inputs = [...document.querySelectorAll('.item input')];
-const elTotal = document.getElementById('total');
-const elPill = document.getElementById('pill');
-const elCount = document.getElementById('count');
+const inputs   = [...document.querySelectorAll('.item input')];
+const elResult = document.getElementById('result');
+const elTotal  = document.getElementById('total');
+const elPill   = document.getElementById('pill');
+const elCount  = document.getElementById('count');
 const elMarker = document.getElementById('marker');
-const elBar = document.getElementById('bar');
-const subs = [...document.querySelectorAll('[data-sub]')];
+const fx = {
+  ok:     document.getElementById('fx-ok'),
+  warn:   document.getElementById('fx-warn'),
+  danger: document.getElementById('fx-danger'),
+};
 
 function classify(t){
-  if (t >= 10) return {cls:'danger', label:'Alto risco', bg:'var(--danger-bg)'};
-  if (t >= 5)  return {cls:'warn',   label:'Médio risco', bg:'var(--warn-bg)'};
-  return {cls:'ok', label:'Baixo risco', bg:'var(--surface)'};
+  if (t >= 10) return {cls:'danger', label:'Alto risco'};
+  if (t >= 5)  return {cls:'warn',   label:'Médio risco'};
+  return {cls:'ok', label:'Baixo risco'};
 }
 
-function update(){
+// Percorre os itens: soma pontos, conta marcados e mantém o destaque visual (.on)
+function compute(){
   let total = 0, n = 0;
-  const bySub = GRUPOS.map(()=>0);
   inputs.forEach(inp=>{
     const parent = inp.closest('.item');
-    if (inp.checked){
-      const p = +inp.dataset.p, g = +inp.dataset.g;
-      total += p; n++; bySub[g] += p;
-      parent.classList.add('on');
-    } else parent.classList.remove('on');
+    if (inp.checked){ total += +inp.dataset.p; n++; parent.classList.add('on'); }
+    else parent.classList.remove('on');
   });
-  elTotal.textContent = total;
-  subs.forEach((s,i)=>{
-    s.textContent = bySub[i] + ' pts';
-    s.classList.toggle('hot', bySub[i] > 0);
-  });
-  const c = classify(total);
-  elPill.className = 'pill ' + c.cls;
-  elPill.textContent = c.label;
-  elBar.style.background = c.bg;
-  elCount.textContent = n === 0 ? 'Nenhum item marcado'
-    : n + (n===1?' item marcado':' itens marcados');
-  // marcador: 0..15 mapeado em 0..100%, saturando em 15+
-  const pct = Math.min(total, 15) / 15 * 100;
-  elMarker.style.left = pct + '%';
+  return {total, n};
 }
 
-inputs.forEach(i=>i.addEventListener('change', update));
-document.getElementById('reset').addEventListener('click', ()=>{
-  inputs.forEach(i=>i.checked=false);
-  update();
+// Só é chamado ao calcular (ou ao alterar itens depois que o resultado já apareceu)
+function render(){
+  const {total, n} = compute();
+  const c = classify(total);
+  elTotal.textContent = total;
+  elPill.className = 'pill ' + c.cls;
+  elPill.textContent = c.label;
+  elCount.textContent = n === 0 ? 'Nenhum item marcado'
+    : n + (n === 1 ? ' item marcado' : ' itens marcados');
+  elMarker.style.left = (Math.min(total, 15) / 15 * 100) + '%';
+  Object.keys(fx).forEach(k => fx[k].classList.toggle('act', k === c.cls));
+}
+
+// Durante o preenchimento, marcar/desmarcar só atualiza o destaque — sem revelar pontos.
+inputs.forEach(i => i.addEventListener('change', ()=>{
+  compute();
+  if (!elResult.hidden) render();   // se o resultado já foi calculado, mantém-no atualizado
+}));
+
+document.getElementById('calc').addEventListener('click', ()=>{
+  render();
+  elResult.hidden = false;
+  elResult.scrollIntoView({behavior:'smooth', block:'start'});
 });
-update();
+
+document.getElementById('reset').addEventListener('click', ()=>{
+  inputs.forEach(i => { i.checked = false; i.closest('.item').classList.remove('on'); });
+  elResult.hidden = true;
+});
 </script>
